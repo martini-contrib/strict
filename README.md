@@ -81,7 +81,7 @@ Calling `n.Accepts("text/html")` will return the client's preference to accept
 the `text/html` content type. This works even if the client accepts `text/*` or
 `*/*`, or if the Accept header is missing, in which case `q` defaults to 1.
 
-* It can also check the content type of the request for.
+* It can also check the content type of the request.
 
 Calling `n.ContentType("application/json", "text/html")` will return `true` if
 the Content-Type header was set to either `application/json` or `text/html`. It
@@ -89,7 +89,7 @@ will also work if the header also provided the charset, e.g. with
 `application/json; charset=UTF-8`.
 
 
-### The `strict.ContentType` handler factory
+#### The `strict.ContentType` handler factory
 
 In the above example, we add `strict.ContentType("application/json",
 "text/xml", "")` to the list of handlers when calling `m.Post(…)`.
@@ -99,7 +99,7 @@ passed in as arguments. The empty string means that we also want to accept
 requests with no `Content-Type` header set.
 
 
-### The `strict.Accept` handler factory
+#### The `strict.Accept` handler factory
 
 In the above example, we add `strict.Accept("application/json", "text/html")`
 to the list of handlers when calling `m.Get(…)`. This will create a handler
@@ -107,7 +107,7 @@ that will write a *406 Not Acceptable* response if the Accept request header
 does not permit any of the supported content types we pass in as arguments.
 
 
-### The `strict.MethodNotAllowed` handler
+#### The `strict.MethodNotAllowed` handler
 
 Passing `strict.MethodNotAllowed` to `m.Router.NotFound(…)` will tell Martini
 to return a *405 Method Not Allowed* instead of a *404 Not Found* when an route
@@ -120,13 +120,13 @@ have to also add a not found handler when calling `m.Router.NotFound(…)`.
 A good candidate for that is `strict.NotFound`.
 
 
-### The `strict.NotFound` handler
+#### The `strict.NotFound` handler
 
 It is similar to `http.NotFound`, except it does not write a response body. The
 response will be an empty *404 Not Found* response.
 
 
-### Constants
+#### Constants
 
 
 The following constant is included for convenience:
