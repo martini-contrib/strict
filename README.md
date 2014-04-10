@@ -4,7 +4,15 @@
 [1]: //github.com/go-martini/martini
 
 This repo contains a set of utilities that help you make a well-behaving,
-strict API using the awesome Martini framework.
+strict API using the awesome Martini framework. The are tested and ready-to-use
+handlers for the following responses:
+
+* 405 Method Not Allowed + Allow header
+* 406 Not Acceptable
+* 415 Unsupported Media Type
+
+There is also a helper function to negotiate the request content type,
+according to [RFC2616 Section 14][4].
 
 
 ## Usage
@@ -66,7 +74,7 @@ func postZOO(n strict.Negotiator, r *http.Request) (int, string) {
 ```
 
 
-### The `strict.Strict` handler
+#### The `strict.Strict` handler
 
 By telling Martini to `m.Use(strict.Strict)`, the `strict.Negotiator` interface
 becomes availabe in handlers. The negotiator can be used for two things:
