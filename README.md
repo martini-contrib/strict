@@ -33,44 +33,32 @@ import (
 
 	"github.com/attilaolah/strict"
 	"github.com/go-martini/martini"
-	"github.com/martini-contrib/render"
 )
-
-type animal struct {
-	ID   int
-	Name string
-}
-
-var zoo = []animal{animal{1, "Alex"}, animal{2, "Marty"}}
 
 func main() {
 	m := martini.Classic()
 	m.Use(strict.Strict)
 	m.Use(render.Renderer())
 
-	m.Get("/zoo", strict.Accept("application/json", "text/html"), getZOO)
-	m.Post("/zoo", strict.ContentType("application/json", "text/xml", ""), postZOO)
+	m.Get("/zoo", strict.Accept("application/json", "text/html"), func(n strict.Negotiator) {
+		// This will only run if the Accept header was either empty or included
+		// application/json, application/*, text/html, text/* or */*.
+		// n.Accepts("application/json") can be used to check which content type is preferred.
+		if n.Accepts("application/json") > n.Accepts("text/html") {
+			// JSON is preferred, return encoded output.
+			return
+		}
+		// HTML is preferred (or both content types have an equal q value), render template.
+	})
+	m.Post("/zoo", strict.ContentType("application/json", "text/xml", ""), func(n strict.Negotiator) {
+		// This will only run if the content-type header was either application/json, text/xml or empty.
+		// n.ContentType("text/xml") can be used to checx if the content type was xml.
+	})
 
+	// 405 for PUT, PATCH, DELETE, etc.
 	m.Router.NotFound(strict.MethodNotAllowed, strict.NotFound)
 
 	m.Run()
-}
-
-func getZOO(n strict.Negotiator, r render.Render) {
-	if n.Accepts("application/json") > n.Accepts("text/html") {
-		r.JSON(http.StatusOK, zoo)
-		return
-	}
-	r.HTML(http.StatusOK, "zoo", zoo)
-}
-
-func postZOO(n strict.Negotiator, r *http.Request) (int, string) {
-	if n.ContentType("application/json") {
-		// JSON-encoded body
-	} else if n.ContentType("text/xml") {
-		// XML-encoded body
-	}
-	return http.StatusCreated, ""
 }
 ```
 
