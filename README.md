@@ -85,8 +85,8 @@ the `text/html` content type. This works even if the client accepts `text/*` or
 
 Calling `n.ContentType("application/json", "text/html")` will return `true` if
 the Content-Type header was set to either `application/json` or `text/html`. It
-will also work if the header also provided the charset, e.g. with
-`application/json; charset=UTF-8`.
+will also work if the header includes the charset, e.g. with `application/json;
+charset=UTF-8`.
 
 
 #### The `strict.ContentType` handler factory
