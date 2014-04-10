@@ -46,7 +46,6 @@ func main() {
 		// n.Accepts("application/json") can be used to check which content type is preferred.
 		if n.Accepts("application/json") > n.Accepts("text/html") {
 			// JSON is preferred, return encoded output.
-			return
 		}
 		// HTML is preferred (or both content types have an equal q value), render template.
 	})
