@@ -1,4 +1,4 @@
-# [Martini][1] Strict Mode
+# [Martini][1] Strict Mode [![wercker status](https://app.wercker.com/status/3adeb16c006087c9a999da4084288241/s/ "wercker status")](https://app.wercker.com/project/bykey/3adeb16c006087c9a999da4084288241)
 
 
 [1]: //github.com/go-martini/martini
