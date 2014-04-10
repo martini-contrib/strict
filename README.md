@@ -1,0 +1,4 @@
+strict
+======
+
+Martini Strict Mode
