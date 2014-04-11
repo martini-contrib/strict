@@ -75,7 +75,7 @@ var _ = Describe("ContentType", func() {
 		Expect(w.Code).
 			ToNot(Equal(http.StatusUnsupportedMediaType))
 	})
-	It("should not accept requests with no content type if empty content type headers are allowed", func() {
+	It("should not accept requests with no content type if empty content type headers are not allowed", func() {
 		ContentType("application/json", "text/xml")(w, r)
 		Expect(w.Code).
 			To(Equal(http.StatusUnsupportedMediaType))
@@ -89,6 +89,66 @@ var _ = Describe("ContentType", func() {
 	It("should not accept requests with a mismatching content type even if empty content types are allowed", func() {
 		r.Header.Set("Content-Type", "text/plain")
 		ContentType("application/json", "text/xml", "")(w, r)
+		Expect(w.Code).
+			To(Equal(http.StatusUnsupportedMediaType))
+	})
+})
+
+var _ = Describe("ContentCharset", func() {
+	var w *httptest.ResponseRecorder
+	var r *http.Request
+	BeforeEach(func() {
+		var err error
+		r, err = http.NewRequest("POST", "http://example.com/", nil)
+		Expect(err).
+			NotTo(HaveOccured())
+		w = httptest.NewRecorder()
+	})
+	It("should accept requests with a matching charset", func() {
+		r.Header.Set("Content-Type", "application/json; charset=UTF-8")
+		ContentCharset("UTF-8")(w, r)
+		Expect(w.Code).
+			ToNot(Equal(http.StatusUnsupportedMediaType))
+	})
+	It("should be case-insensitive", func() {
+		r.Header.Set("Content-Type", "application/json; charset=utf-8")
+		ContentCharset("UTF-8")(w, r)
+		Expect(w.Code).
+			ToNot(Equal(http.StatusUnsupportedMediaType))
+	})
+	It("should accept requests with a matching charset with extra values", func() {
+		r.Header.Set("Content-Type", "application/json; foo=bar; charset=UTF-8; spam=eggs")
+		ContentCharset("UTF-8")(w, r)
+		Expect(w.Code).
+			ToNot(Equal(http.StatusUnsupportedMediaType))
+	})
+	It("should accept requests with a matching charset when multiple charsets are supported", func() {
+		r.Header.Set("Content-Type", "text/xml; charset=UTF-8")
+		ContentCharset("UTF-8", "Latin-1")(w, r)
+		Expect(w.Code).
+			ToNot(Equal(http.StatusUnsupportedMediaType))
+	})
+	It("should accept requests with no charset if empty charset headers are allowed", func() {
+		r.Header.Set("Content-Type", "text/xml")
+		ContentCharset("UTF-8", "")(w, r)
+		Expect(w.Code).
+			ToNot(Equal(http.StatusUnsupportedMediaType))
+	})
+	It("should not accept requests with no charset if empty charset headers are not allowed", func() {
+		r.Header.Set("Content-Type", "text/xml")
+		ContentCharset("UTF-8")(w, r)
+		Expect(w.Code).
+			To(Equal(http.StatusUnsupportedMediaType))
+	})
+	It("should not accept requests with a mismatching charset", func() {
+		r.Header.Set("Content-Type", "text/plain; charset=Latin-1")
+		ContentCharset("UTF-8")(w, r)
+		Expect(w.Code).
+			To(Equal(http.StatusUnsupportedMediaType))
+	})
+	It("should not accept requests with a mismatching charset even if empty charsets are allowed", func() {
+		r.Header.Set("Content-Type", "text/plain; charset=Latin-1")
+		ContentCharset("UTF-8", "")(w, r)
 		Expect(w.Code).
 			To(Equal(http.StatusUnsupportedMediaType))
 	})

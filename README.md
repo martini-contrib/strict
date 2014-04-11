@@ -95,6 +95,15 @@ passed in as arguments. The empty string means that we also want to accept
 requests with no `Content-Type` header set.
 
 
+#### The `strict.ContentCharset` handler factory
+
+This handler allows you to white-list a specific set of charsets for the
+Content-Type header (i.e. the "UTF-8" in "Content-Type: text/plain;
+charset=UTF-8"). A mismatch will result in a *415 Unsupported Media Type*
+response. Including the empty string will allow headers with no charset
+specified (since in most cases it is safe to assume UTF-8).
+
+
 #### The `strict.Accept` handler factory
 
 In the above example, we add `strict.Accept("application/json", "text/html")`

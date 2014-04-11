@@ -38,10 +38,24 @@ func Strict(w http.ResponseWriter, r *http.Request, c martini.Context) {
 	c.MapTo(&negotiator{r}, (*Negotiator)(nil))
 }
 
-// ContentType generates a handler that writes a 415 Unsupported Media Type response if noneof the types match.
+// ContentType generates a handler that writes a 415 Unsupported Media Type response if none of the types match.
+// An empty type will allow requests with empty or missing Content-Type header.
 func ContentType(ctypes ...string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if !checkCT(r.Header.Get("Content-Type"), ctypes...) {
+			w.WriteHeader(http.StatusUnsupportedMediaType)
+		}
+	}
+}
+
+// ContentCharset generates a handler that writes a 415 Unsupported Media Type response if none of the charsets match.
+// An empty charset will allow requests with no Content-Type header or no specified charset.
+func ContentCharset(charsets ...string) http.HandlerFunc {
+	for i, c := range charsets {
+		charsets[i] = strings.ToLower(c)
+	}
+	return func(w http.ResponseWriter, r *http.Request) {
+		if !checkCC(r.Header.Get("Content-Type"), charsets...) {
 			w.WriteHeader(http.StatusUnsupportedMediaType)
 		}
 	}
@@ -121,11 +135,24 @@ func accepts(a, ctype string) (q float64) {
 	return
 }
 
-// Check the content type of the request against a list of acceptable values.
+// Check the content type against a list of acceptable values.
 func checkCT(ct string, ctypes ...string) bool {
 	ct, _ = split(ct, ";")
 	for _, t := range ctypes {
 		if ct == t {
+			return true
+		}
+	}
+	return false
+}
+
+// Check the content encoding against a list of acceptable values.
+func checkCC(ce string, charsets ...string) bool {
+	_, ce = split(strings.ToLower(ce), ";")
+	_, ce = split(ce, "charset=")
+	ce, _ = split(ce, ";")
+	for _, c := range charsets {
+		if ce == c {
 			return true
 		}
 	}
