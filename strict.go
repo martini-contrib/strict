@@ -34,7 +34,7 @@ func (n *negotiator) ContentType(ctypes ...string) bool {
 }
 
 // Strict is a `martini.Handler` that provides a `Negotiator` instance.
-func Strict(w http.ResponseWriter, r *http.Request, c martini.Context) {
+func Strict(r *http.Request, c martini.Context) {
 	c.MapTo(&negotiator{r}, (*Negotiator)(nil))
 }
 
