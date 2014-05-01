@@ -94,6 +94,9 @@ response if the request content type is none of the acceptable content types
 passed in as arguments. The empty string means that we also want to accept
 requests with no `Content-Type` header set.
 
+`ContentType` only acts on `POST`, `PATCH` and `PUT` requests, so it is safe to
+use it with `m.Use`. It will never block `GET` requests.
+
 
 #### The `strict.ContentCharset` handler factory
 
@@ -102,6 +105,9 @@ Content-Type header (i.e. the "UTF-8" in "Content-Type: text/plain;
 charset=UTF-8"). A mismatch will result in a *415 Unsupported Media Type*
 response. Including the empty string will allow headers with no charset
 specified (since in most cases it is safe to assume UTF-8).
+
+Like `ContentType`, `ContentCharset` also only acts on `POST`, `PATCH` and
+`PUT` requests.
 
 
 #### The `strict.Accept` handler factory
