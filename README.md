@@ -19,11 +19,11 @@ according to [RFC2616 Section 14][4].
 ## Usage
 
 Here is a complete working example that uses the `strict` package together with
-the [`render`][2] contrib package. In particular, the `render` and [`bind`][3]
+the [`render`][2] contrib package. In particular, the `render` and [`binding`][3]
 contrib packages work very nicely together with `strict`.
 
 [2]: https://github.com/martini-contrib/render
-[3]: https://github.com/martini-contrib/bind
+[3]: https://github.com/martini-contrib/binding
 
 ```go
 package main
