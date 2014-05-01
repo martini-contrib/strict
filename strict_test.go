@@ -92,6 +92,30 @@ var _ = Describe("ContentType", func() {
 		Expect(w.Code).
 			To(Equal(http.StatusUnsupportedMediaType))
 	})
+	It("should act on block POST, PATCH and PUT requests", func() {
+		var err error
+		for _, m := range []string{"POST", "PATCH", "PUT"} {
+			r, err = http.NewRequest(m, "http://example.com/", nil)
+			Expect(err).
+				NotTo(HaveOccured())
+			r.Header.Set("Content-Type", "text/plain")
+			ContentType("application/json", "text/xml", "")(w, r)
+			Expect(w.Code).
+				To(Equal(http.StatusUnsupportedMediaType))
+		}
+	})
+	It("should not block GET, HEAD, OPTIONS and DELETE requests", func() {
+		var err error
+		for _, m := range []string{"GET", "HEAD", "OPTIONS", "DELETE"} {
+			r, err = http.NewRequest(m, "http://example.com/", nil)
+			Expect(err).
+				NotTo(HaveOccured())
+			r.Header.Set("Content-Type", "text/plain")
+			ContentType("application/json", "text/xml", "")(w, r)
+			Expect(w.Code).
+				NotTo(Equal(http.StatusUnsupportedMediaType))
+		}
+	})
 })
 
 var _ = Describe("ContentCharset", func() {
@@ -151,6 +175,30 @@ var _ = Describe("ContentCharset", func() {
 		ContentCharset("UTF-8", "")(w, r)
 		Expect(w.Code).
 			To(Equal(http.StatusUnsupportedMediaType))
+	})
+	It("should act on block POST, PATCH and PUT requests", func() {
+		var err error
+		for _, m := range []string{"POST", "PATCH", "PUT"} {
+			r, err = http.NewRequest(m, "http://example.com/", nil)
+			Expect(err).
+				NotTo(HaveOccured())
+			r.Header.Set("Content-Type", "text/plain")
+			ContentType("application/json", "text/xml", "")(w, r)
+			Expect(w.Code).
+				To(Equal(http.StatusUnsupportedMediaType))
+		}
+	})
+	It("should not block GET, HEAD, OPTIONS and DELETE requests", func() {
+		var err error
+		for _, m := range []string{"GET", "HEAD", "OPTIONS", "DELETE"} {
+			r, err = http.NewRequest(m, "http://example.com/", nil)
+			Expect(err).
+				NotTo(HaveOccured())
+			r.Header.Set("Content-Type", "text/plain")
+			ContentType("application/json", "text/xml", "")(w, r)
+			Expect(w.Code).
+				NotTo(Equal(http.StatusUnsupportedMediaType))
+		}
 	})
 })
 
