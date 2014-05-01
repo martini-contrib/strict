@@ -42,7 +42,7 @@ func Strict(r *http.Request, c martini.Context) {
 // An empty type will allow requests with empty or missing Content-Type header.
 func ContentType(ctypes ...string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if !checkCT(r.Header.Get("Content-Type"), ctypes...) {
+		if contentMethod(r.Method) && !checkCT(r.Header.Get("Content-Type"), ctypes...) {
 			w.WriteHeader(http.StatusUnsupportedMediaType)
 		}
 	}
@@ -55,7 +55,7 @@ func ContentCharset(charsets ...string) http.HandlerFunc {
 		charsets[i] = strings.ToLower(c)
 	}
 	return func(w http.ResponseWriter, r *http.Request) {
-		if !checkCC(r.Header.Get("Content-Type"), charsets...) {
+		if contentMethod(r.Method) && !checkCC(r.Header.Get("Content-Type"), charsets...) {
 			w.WriteHeader(http.StatusUnsupportedMediaType)
 		}
 	}
@@ -157,6 +157,12 @@ func checkCC(ce string, charsets ...string) bool {
 		}
 	}
 	return false
+}
+
+// Check if the request method can contain a content
+func contentMethod(m string) bool {
+	// No Content-Type for GET, HEAD, OPTIONS, DELETE and CONNECT requests.
+	return m == "POST" || m == "PATCH" || m == "PUT"
 }
 
 // Split a string in two parts, cleaning any whitespace.
