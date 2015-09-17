@@ -48,6 +48,16 @@ func ContentType(ctypes ...string) http.HandlerFunc {
 	}
 }
 
+// ContentLength generates a handler that writes a 411 Length Required response if the request
+// doesn't contain the Content-Length header
+func ContentLength() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if contentMethod(r.Method) && r.Header.Get("Content-Length") == "" {
+			w.WriteHeader(http.StatusLengthRequired)
+		}
+	}
+}
+
 // ContentCharset generates a handler that writes a 415 Unsupported Media Type response if none of the charsets match.
 // An empty charset will allow requests with no Content-Type header or no specified charset.
 func ContentCharset(charsets ...string) http.HandlerFunc {
