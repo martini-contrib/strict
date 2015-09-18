@@ -100,7 +100,7 @@ use it with `m.Use`. It will never block `GET` requests.
 #### The `strict.ContentLength` handler factory
 
 This handlers checks if the HTTP requests contain the `Content-Length` header.
-If the `Content-Length` header is not present, the handler returns a HTTP *411 Lenght Required*
+If the `Content-Length` header is not present, the handler returns a HTTP *411 Length Required*
 response.
 
 Like `ContentType` and `ContentCharset`, `ContentLength` only acts

@@ -134,7 +134,7 @@ var _ = Describe("ContentLength", func() {
 		Expect(w.Code).
 			ToNot(Equal(http.StatusLengthRequired))
 	})
-	It("should block requests with no Content-Lenght set", func() {
+	It("should block requests with no Content-Length set", func() {
 		ContentLength()(w, r)
 		Expect(w.Code).
 			To(Equal(http.StatusLengthRequired))
