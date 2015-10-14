@@ -55,7 +55,7 @@ func main() {
 	})
 
 	// 405 for PUT, PATCH, DELETE, etc.
-	m.Router.NotFound(strict.MethodNotAllowed, strict.NotFound)
+	m.NotFound(strict.MethodNotAllowed, strict.NotFound)
 
 	m.Run()
 }
