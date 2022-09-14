@@ -4,7 +4,7 @@
 [1]: //github.com/go-martini/martini
 
 This repo contains a set of utilities that help you make a well-behaving,
-strict API using the awesome Martini framework. The are tested and ready-to-use
+strict API using the awesome Martini framework. There are tested and ready-to-use
 handlers for the following responses:
 
 * 404 Not Found with empty body
